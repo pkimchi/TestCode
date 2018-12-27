@@ -1,0 +1,21 @@
+h1 a {
+    color: #FCA205;
+}
+
+h1 {
+  padding: 50px;
+  border: 1px solid #5D6063;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+#wrap {
+  width: 80%;
+  margin: auto;
+  background: #fff;
+  overflow: hidden;
+  padding: 15px;
+
+}

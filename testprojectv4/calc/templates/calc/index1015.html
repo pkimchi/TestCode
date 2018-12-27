@@ -1,0 +1,135 @@
+
+{% load staticfiles %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <script src="{% static 'calc/main.js' %}" type="text/javascript"></script>
+    <script src="{% static 'calc/jquery.min.js' %}" type="text/javascript"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Minimum Population Size</title>
+
+    <!-- Custom Fonts -->
+    <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+
+
+
+    <style>
+    .container {
+        position: relative;
+    }
+
+    .bottomleft {
+        position: absolute;
+        bottom: 8px;
+        left: 16px;
+        font-size: 18px;
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+    </style>
+
+
+</head>
+
+<body>
+
+    <div id="wrap">
+
+    <div style="text-align:center;">
+
+                    <h1>Calculate by entering p1 %,
+                    p2 %, Confidence level %, and Power %</h1>
+
+                    <hr>
+
+            <div style="font-family: Verdana; font-weight: normal;
+                        font-size: 20px; color: black;">
+
+                <label style="font-weight: normal;"> p1 %: </label>
+
+                <input type="text" name="p1" id="02" value="" size="25"/><br>
+                <label style="font-weight: normal;">p2 %: </label>
+
+                <input type="text" name="p2" id="03" value="" size="25"/><br>
+                <label style="font-weight: normal;">Confidence Level %: </label>
+
+                <input type="text" name="conLvl" id="04" value="" size="2"/><br>
+                <label style="font-weight: normal;"> Power %: </label>
+
+                <input type="text" name="power" id="05" value="" size="19"/><br>
+
+                <label style="font-weight: normal;"># Expected daily Visitors: </label>
+
+                <input type="text" name="power" id="06" value="" size="2"/><br>
+
+                <hr>
+
+                <p> <font color="black">Click to find out your recommended
+                  Sample Size</font> </p>
+                <div onclick="calc()" style="cursor:pointer;">Estimate</div>
+
+                <div id="sample_size"></div>
+
+                <hr>
+
+  <!--              <div id="test"></div>
+
+-->
+            </div>
+
+
+
+    </div>
+
+    <div class="container"; style=margin-top:20px;>
+      <img src="static/calc/img/logo.png">
+    </div>
+
+  </div>
+
+<!--
+<div style="margin-top:20px; background-image: url('{% static 'calc/img/happyface.jpg' %}'); height:400px; background-repeat:no-repeat;
+    background-position:left top; background-size:100%;">
+
+</div>
+
+-->
+
+<!-- csrf token -->
+<form>{% csrf_token %}</form>
+
+
+
+
+
+    <!-- jQuery -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="{% static 'vendor/scrollreveal/scrollreveal.min.js' %}"></script>
+    <script src="{% static 'vendor/magnific-popup/jquery.magnific-popup.min.js' %}"></script>
+
+    <!-- Theme JavaScript -->
+    <script src="{% static 'js/creative.min.js' %}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,348 @@
+
+{% load staticfiles %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <script src="{% static 'calc/main.js' %}" type="text/javascript"></script>
+    <script src="{% static 'calc/jquery.min.js' %}" type="text/javascript"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Minimum Population Size</title>
+
+    <!-- Custom Fonts -->
+    <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+
+
+
+    <style>
+    .container {
+        position: relative;
+    }
+
+    .bottomleft {
+        position: absolute;
+        bottom: 8px;
+        left: 16px;
+        font-size: 18px;
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+
+        .help-tip{
+            position: relative;
+            display: inline-block;
+            text-align: center;
+            background-color: #649FFF;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            line-height: 26px;
+            cursor: default;
+            padding: 2px;
+        }
+
+        .help-tip:before{
+            content:'?';
+            font-weight: bold;
+            color:#fff;
+        }
+
+        .help-tip:hover p{
+            display:block;
+            transform-origin: 50% 00%;
+
+            -webkit-animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
+
+        }
+
+        .help-tip p{    /* The tooltip */
+            display: none;
+            text-align: left;
+            background-color: white;
+            padding: 20px;
+            width: 300px;
+            position: absolute;
+            border: 1px;
+            border-style: solid;
+            border-color: whitesmoke;
+            border-radius: 3px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+            right: -5px;
+            color: black;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .help-tip p:before{ /* The pointer of the tooltip */
+            position: absolute;
+            display: none;
+            content: '';
+            width:0;
+            height: 0;
+            border:6px solid transparent;
+            border-bottom-color:#1E2021;
+            right:10px;
+            top:-12px;
+        }
+
+        .help-tip p:after{ /* Prevents the tooltip from being hidden */
+            width:100%;
+            height:40px;
+            content:'';
+            position: absolute;
+            top:-40px;
+            left:0;
+        }
+
+        /* CSS animation */
+
+        @-webkit-keyframes fadeIn {
+          0% {
+              opacity:0;
+              transform: scale(0.6);
+          }
+
+          100% {
+              opacity:100%;
+              transform: scale(1);
+          }
+        }
+
+        @keyframes fadeIn {
+          0% { opacity:0; }
+          100% { opacity:100%; }
+        }
+      </style>
+
+    </head>
+
+    <body>
+      <div style="text-align:left; background-color:white; padding:40px ">
+
+      <h2>Sample Size Calculator v1</h2>
+
+      <p>This is simple sample size calculator used to tell if there is a
+        statistical difference between two proportions/conversion rates.</p>
+      <p>You will be required to select 1 tailed or two tailed(2 tailed will be
+        our default) and then provide p1(baseline proportion), p2(expected proportion),
+        Confidence Level(95 default), Power(80 default) and Sample Ratio(1 default).</p>
+      <p>Number of Variations, Expected Daily Visitors, and Population Size
+        are optional. The expected daily visitors are required if you want to know
+        how many days to run your test</p>
+
+      <h3>The Math</h3>
+      <p>This calculator will use a test for equality to determine what sample size
+        is required to show a difference for the two proportions</p>
+      <p>The fromula used to calculate the sample size is: n = (Zα/2+Zβ)<sup>2</sup>
+        * (p1(1-p1)+p2(1-p2)) / (p1-p2)<sup>2</sup></p>
+      <P>The formula used for a finite population correction is: n = (Zα/2+Zβ)<sup>2</sup>
+        * (f1*p1(1-p1)+f2*p2(1-p2)) / (p1-p2)<sup>2</sup> <br>
+        Where f1 and f2 are the population size, for this calculator f1 = f2</p>
+      <p>Reference to the math can be seen at
+        <b>Wang, H. and Chow, S.-C. 2007. Sample Size Calculation for Comparing
+        Proportions. Wiley Encyclopedia of Clinical Trials.</b></p>
+
+      <h3>Example</h3>
+      <p>You have a new DM promotion you want to run, You know that currently you have
+        baseline conversion of 10% and want to see at least a coversion rate of 15%
+        for the promotion to be effective.  After putting in the numbers you will know
+        that it will take 682 users who have recieved the new DM promotion and 682 users
+        who have not recieved the new DM promotion to detect a significant difference.</p>
+
+      </div>
+
+        <div style="text-align:center; background-color:whitesmoke; padding:60px ">
+
+            <div>
+                <div style="font-family: Verdana; font-weight: normal;
+                            font-size: 20px; color:black; width:400px;
+                            margin:0 auto; border:1px solid darkgray;
+                            border-radius:10px; padding:20px;
+                            background-color:white; ">
+
+                    <div>
+
+                    <label><input type="radio" name="tvalue" value="t1"/>
+                        1 Tailed</label>
+                    <label><input type="radio" name="tvalue" value="t2" checked/>
+                        2 Tailed</label>
+                    </div>
+
+                    <hr>
+
+                    <div style="font-size:15px;">Required</div>
+                    <div style="font-size:10px;">To run the Calculator</div>
+
+                    <div style="margin:10px; text-align:left; ">
+                    <label style="font-weight: normal; color:#0058FF;">
+                      P1(Baseline Proportion)</label>
+    <!--            this adds the % after the input box -->
+                    <span style="float:right; color: darkgray;">%
+                      <div class="help-tip">
+                        <p>What proportion/conversion rate are you starting with?</p>
+                      </div>
+                    </span>
+                    <input type="text" id="02" value="" size="2"
+                      style="padding:7px; float:right; border-radius:5px;
+                      outline:none;"/>
+                    </div>
+
+                    <div style="margin:10px; text-align:left;">
+                    <label style="font-weight: normal; color:#0058FF;">
+                      P2(Expected Proportion)</label>
+                    <span style="float:right; color: darkgray;">%
+                      <div class="help-tip">
+                        <p>What proportion/conversion rate do you  &nbsp think
+                          you will end with?</p>
+                      </div>
+                    </span>
+                    <input type="text" id="03" value="" size="2"
+                      style="padding:7px; float:right; border-radius:5px;"/>
+                    </div>
+
+                    <div style="margin:10px; text-align:left;">
+                    <label style="font-weight: normal; color:#0058FF;">Confidence Level </label>
+                    <span style="float:right; color: darkgray;">%
+                      <div class="help-tip">
+                        <p>The Confidence level you want to achieve. The higher the
+                          confidence level the larger  &nbsp the sample size you will need.
+                          Popular choices are 90%, 95%, 99%, if unsure  &nbsp leave at 95%</p>
+                      </div>
+                    </span>
+                    <input type="text" id="04" value="95" size="2"
+                    style="padding:7px; float:right; border-radius:5px;"/>
+                    </div>
+
+                    <div style="margin:10px; text-align:left;">
+                    <label style="font-weight: normal; color:#0058FF;">Power </label>
+                    <span style="float:right; color: darkgray;">%
+                      <div class="help-tip">
+                        <p>The Power you want to achieve. The higher the confidence
+                          level the larger the sample size you will need.
+                          Popular choice is 80%, if unsure leave at 80%</p>
+                      </div>
+                    </span>
+                    <input type="text" id="05" value="80" size="2"
+                    style="padding:7px; float:right; border-radius:5px;"/>
+                    </div>
+
+                    <div style="margin:10px; text-align:left;">
+                    <label style="font-weight: normal; color:#C20A86;">
+                      Sample Ratio </label>
+                    <span style="float:right; color: darkgray;">&nbsp &nbsp
+                      <div class="help-tip">
+                        <p>Sample ratio of p2 to p1, if unsure leave at  &nbsp
+                          1 becuase most studies have equal ratio of variation to
+                          control</p>
+                      </div>
+                    </span>
+                    <input type="text" id="07" value="1" size="2"
+                    style="padding:7px; float:right; border-radius:5px;"/>
+                    </div>
+
+                    <div style="margin:10px; text-align:left;">
+                    <label style="font-weight: normal; color:#C20A86;">
+                      Expected Response Rate </label>
+                    <span style="float:right; color: darkgray;">&nbsp &nbsp
+                      <div class="help-tip">
+                        <p>If you think the Expected Response Rate is less than
+                          100% then put in the expected reponse rate such as
+                          50%, 80%, etc so the sample size can be adjusted.</p>
+                        </div>
+                    </span>
+                    <input type="text" id="10" value="100" size="2"
+                    style="padding:7px; float:right; border-radius:5px;"/>
+                    </div>
+
+                    <hr>
+                    <div style="font-size:15px;">Optional</div>
+                    <div style="font-size:10px;">To Factor in Population Size</div>
+
+                    <div style="margin:10px; text-align:left;">
+                    <label style="font-weight: normal; color:#59afe1;">
+                      Population Size </label>
+                    <span style="float:right; color: darkgray;">&nbsp &nbsp
+                      <div class="help-tip">
+                        <p>Finite Population Correction, If population is unknown leave blank.
+                          ie. your total list number for your email campaign</p>
+                      </div>
+                    </span>
+                    <input type="text" id="09" value="" size="2"
+                    style="padding:7px; float:right; border-radius:5px;"/>
+                    </div>
+
+                    <hr>
+                    <div style="font-size:15px;">Optional</div>
+                    <div style="font-size:10px;">To get estimated days to run test</div>
+
+                    <div style="margin:10px; text-align:left;">
+                    <label style="font-weight: normal; color:#59afe1;">
+                      Number of Variations </label>
+                    <span style="float:right; color: darkgray;">&nbsp &nbsp
+                      <div class="help-tip">
+                        <p>Total number of Variations including the
+                          control(so minimum 2)</p>
+                      </div>
+                    </span>
+                    <input type="text" id="08" value="2" size="2"
+                    style="padding:7px; float:right; border-radius:5px;"/>
+                    </div>
+
+                    <div style="margin:10px; text-align:left;">
+                    <label style="font-weight: normal; color:#59afe1;">
+                      Expected daily Visitors </label>
+                    <span style="float:right; color: darkgray;">&nbsp &nbsp
+                      <div class="help-tip">
+                        <p>Expected daily visitors, if unknown leave blank</p>
+                      </div>
+                    </span>
+                    <input type="text" id="06" value="" size="2"
+                    style="padding:7px; float:right; border-radius:5px;"/>
+                    </div>
+
+                <hr>
+
+                <div onclick="calc()" style="cursor:pointer; background-color:lightcyan;
+                border:1px solid darkgray; display:inline-block;
+                border-radius:7px; padding:10px;">Estimate</div>
+
+                <div style="color:#24BF53;" id="sample_size"></div>
+                <div style="color:#36D664;" id="days_required"></div>
+
+                <div style="color:#686B72;" id="lift_treatment"></div>
+
+                <hr>
+
+                <div class="container"; style=margin-top:20px;>
+                  <img src="static/calc/img/logo.png">
+<!--                  <img src="static/calc/img/logo2.jpg">    --->
+                </div>
+            </div>
+
+    </div>
+
+</div>
+
+
+<!-- csrf token -->
+<form>{% csrf_token %}</form>
+
+
+</body>
+
+</html>
